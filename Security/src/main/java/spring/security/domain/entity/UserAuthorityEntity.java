@@ -1,27 +1,21 @@
 package spring.security.domain.entity;
 
+
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
-@Table(name = "user_roles")
-public class UserRole {
+@Table(name = "authorities")
+public class UserAuthorityEntity {
 
     private Long id;
     private String name;
-    private User user;
+    private UserEntity userEntity;
 
-
-    public UserRole() {
-    }
-
-    public UserRole(String name) {
-        this.name = name;
+    public UserAuthorityEntity() {
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     public Long getId() {
         return id;
     }
@@ -41,11 +35,11 @@ public class UserRole {
 
     @ManyToOne()
     @JoinColumn(name = "user_id")
-    public User getUser() {
-        return user;
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

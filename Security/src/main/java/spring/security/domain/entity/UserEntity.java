@@ -1,32 +1,29 @@
 package spring.security.domain.entity;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class UserEntity {
 
     private Long id;
-    private String username;
+    private String name;
     private String password;
     private boolean isActive;
-    private Set<UserRole> roles;
+    List<UserAuthorityEntity> authorities;
 
-
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String username, String password, boolean isActive) {
-        this.username = username;
+    public UserEntity(String name, String password, boolean isActive) {
+        this.name = name;
         this.password = password;
         this.isActive = isActive;
     }
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     public Long getId() {
         return id;
     }
@@ -35,13 +32,13 @@ public class User {
         this.id = id;
     }
 
-    @Column(name = "username")
-    public String getUsername() {
-        return username;
+    @Column(name = "name")
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Column(name = "password")
@@ -62,13 +59,13 @@ public class User {
         isActive = active;
     }
 
-    @OneToMany(mappedBy = "user", targetEntity = UserRole.class,
-    cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    public Set<UserRole> getRoles() {
-        return roles;
+    @OneToMany(mappedBy = "userEntity", targetEntity = UserAuthorityEntity.class,
+    fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public List<UserAuthorityEntity> getAuthorities() {
+        return authorities;
     }
 
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
+    public void setAuthorities(List<UserAuthorityEntity> authorities) {
+        this.authorities = authorities;
     }
 }
