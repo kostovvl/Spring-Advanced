@@ -7,42 +7,44 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import spring.security.domain.entity.UserAuthorityEntity;
 import spring.security.domain.entity.UserEntity;
+import spring.security.domain.entity.UserRole;
 import spring.security.repository.UserEntityRepository;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class UserEntityDetailsService implements UserDetailsService {
+public class UserEntityDetails implements UserDetailsService {
 
     private final UserEntityRepository userEntityRepository;
 
-    public UserEntityDetailsService(UserEntityRepository userEntityRepository) {
+    public UserEntityDetails(UserEntityRepository userEntityRepository) {
         this.userEntityRepository = userEntityRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<UserEntity> userEntity = this.userEntityRepository.findByName(username);
-        return userEntity.map(this::map)
-                .orElseThrow(() -> new UsernameNotFoundException("User" + username + "not found!"));
+        Optional<UserEntity> userEntityOpt = this.userEntityRepository.findByUsername(username);
+
+        return userEntityOpt
+                .map(this::map)
+                .orElseThrow(() -> new UsernameNotFoundException("Username" + username + "does not exist!"));
     }
 
     private UserDetails map(UserEntity userEntity) {
         return new User(
-                userEntity.getName(),
+                userEntity.getUsername(),
                 userEntity.getPassword(),
-                userEntity.getAuthorities()
+                userEntity.getRoles()
                 .stream()
-                .map(this::getAuthorities)
+                .map(this::map)
                 .collect(Collectors.toList())
         );
     }
 
-    private GrantedAuthority getAuthorities(UserAuthorityEntity userAuthorityEntity) {
-        return new SimpleGrantedAuthority(userAuthorityEntity.getName());
+    private GrantedAuthority map(UserRole role) {
+        return new SimpleGrantedAuthority(role.getName());
     }
 }

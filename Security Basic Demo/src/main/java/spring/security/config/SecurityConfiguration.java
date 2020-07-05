@@ -6,31 +6,34 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import spring.security.user.UserEntityDetails;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final PasswordEncoder passwordEncoder;
-    private final UserDetailsService userEntityDetailsService;
+   private final PasswordEncoder passwordEncoder;
+   private final UserDetailsService userEntityDetails;
 
-    public SecurityConfig(PasswordEncoder passwordEncoder, UserDetailsService userEntityDetailsService) {
+    public SecurityConfiguration(PasswordEncoder passwordEncoder, UserEntityDetails userEntityDetails) {
         this.passwordEncoder = passwordEncoder;
-        this.userEntityDetailsService = userEntityDetailsService;
+        this.userEntityDetails = userEntityDetails;
     }
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userEntityDetailsService)
+
+        auth.userDetailsService(userEntityDetails)
                 .passwordEncoder(passwordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/home", "/").permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/", "/home").permitAll()
                 .antMatchers("/user").hasRole("USER")
-                .and().formLogin();
+                .antMatchers("/admin").hasRole("ADMIN")
+                .and()
+                .formLogin();
     }
 }

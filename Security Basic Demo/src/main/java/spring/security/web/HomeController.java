@@ -10,9 +10,9 @@ import java.security.Principal;
 @Controller
 public class HomeController {
 
-    @GetMapping(value = {"/", "/home"})
+    @GetMapping("/")
     public String home() {
-        return "home";
+        return "index";
     }
 
     @GetMapping("/user")
