@@ -37,4 +37,8 @@ public class Role extends BaseEntity {
     public void setUsers(Set<UserEntity> users) {
         this.users = users;
     }
+
+    public void addUser(UserEntity userEntity) {
+        this.users.add(userEntity);
+    }
 }

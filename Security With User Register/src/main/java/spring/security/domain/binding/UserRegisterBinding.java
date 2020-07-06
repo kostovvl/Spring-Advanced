@@ -1,14 +1,16 @@
 package spring.security.domain.binding;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserRegisterBinding {
 
     private String username;
     private String password;
-    private String passwordConfirm;
+    private String confirmPassword;
 
     public UserRegisterBinding() {
+
     }
 
     @Length(min = 2, message = "Username must be at least 2 characters!")
@@ -30,11 +32,11 @@ public class UserRegisterBinding {
     }
 
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

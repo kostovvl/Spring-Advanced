@@ -19,8 +19,8 @@
                 <input th:field = "*{username}" type="text" class="form-control" id="username" name="username"/>
                 <small class="text-danger"  th:each="e : ${#fields.errors('username')}"
                 th:text="${e}"></small>
-                <small class="text-danger"  th:if="${passwordsNoMatch}">
-                    Passwords don't match!
+                <small class="text-danger"  th:if="${userExists}">
+                    User with such username already exists!
                 </small>
             </div>
             <div class="form-group">

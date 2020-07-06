@@ -1,6 +1,7 @@
 package spring.security.web;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import spring.security.domain.binding.UserLoginBinding;
 import spring.security.domain.binding.UserRegisterBinding;
 import spring.security.domain.dto.UserEntityDto;
 import spring.security.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/users")
@@ -45,8 +48,6 @@ public class UserController {
                                   UserRegisterBinding userRegisterBinding, BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
 
-        //TODO crypt passwords of userRegisterBinding
-
         if (bindingResult.hasErrors()) {
 
             redirectAttributes.addFlashAttribute("userRegister", userRegisterBinding);
@@ -55,7 +56,7 @@ public class UserController {
             return "redirect:/users/register";
         }
 
-        if (!userRegisterBinding.getPassword().equals(userRegisterBinding.getPasswordConfirm())) {
+        if (!userRegisterBinding.getPassword().equals(userRegisterBinding.getConfirmPassword())) {
             redirectAttributes.addFlashAttribute("userRegister", userRegisterBinding);
             redirectAttributes.addFlashAttribute("passwordsNoMatch", true);
 
@@ -71,14 +72,52 @@ public class UserController {
         }
 
         UserEntityDto userEntityDto = this.mapper.map(userRegisterBinding, UserEntityDto.class);
-        userEntityDto.setPassword(passwordEncoder.encode(userRegisterBinding.getPassword()));
+        this.userEntityService.registerUser(userEntityDto);
 
         return "redirect:/users/login";
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+
+        if (model.getAttribute("userLogin") == null) {
+            model.addAttribute("userLogin", new UserLoginBinding());
+        }
+
         return "login";
+    }
+
+    @PostMapping("/login")
+    public String loginConfirm(@Valid @ModelAttribute("userLogin")
+                               UserLoginBinding userLoginBinding, BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userLogin", userLoginBinding);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLogin", bindingResult);
+
+            return "redirect:/users/login";
+        }
+
+        if (!this.userEntityService.userExists(userLoginBinding.getUsername())) {
+            redirectAttributes.addFlashAttribute("userLogin", userLoginBinding);
+            redirectAttributes.addFlashAttribute("UserNotExist", true);
+
+            return "redirect:/users/login";
+        }
+
+        UserEntityDto userEntityDto = this.userEntityService.findByUsername(userLoginBinding.getUsername());
+
+
+
+        if (!passwordEncoder.matches(userLoginBinding.getPassword(), userEntityDto.getPassword())) {
+            redirectAttributes.addFlashAttribute("userLogin", userLoginBinding);
+            redirectAttributes.addFlashAttribute("wrongPassword", true);
+
+            return "redirect:/users/login";
+        }
+
+        return "redirect:/home";
     }
 
 }
