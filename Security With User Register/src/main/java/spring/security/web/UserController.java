@@ -78,46 +78,44 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
-
-        if (model.getAttribute("userLogin") == null) {
-            model.addAttribute("userLogin", new UserLoginBinding());
-        }
-
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String loginConfirm(@Valid @ModelAttribute("userLogin")
-                               UserLoginBinding userLoginBinding, BindingResult bindingResult,
-                               RedirectAttributes redirectAttributes) {
-
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("userLogin", userLoginBinding);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLogin", bindingResult);
-
-            return "redirect:/users/login";
-        }
-
-        if (!this.userEntityService.userExists(userLoginBinding.getUsername())) {
-            redirectAttributes.addFlashAttribute("userLogin", userLoginBinding);
-            redirectAttributes.addFlashAttribute("UserNotExist", true);
-
-            return "redirect:/users/login";
-        }
-
-        UserEntityDto userEntityDto = this.userEntityService.findByUsername(userLoginBinding.getUsername());
-
-
-
-        if (!passwordEncoder.matches(userLoginBinding.getPassword(), userEntityDto.getPassword())) {
-            redirectAttributes.addFlashAttribute("userLogin", userLoginBinding);
-            redirectAttributes.addFlashAttribute("wrongPassword", true);
-
-            return "redirect:/users/login";
-        }
+    public String login() {
 
         return "redirect:/home";
     }
+
+
+
+//    @PostMapping("/login")
+//    public String loginConfirm(@Valid @ModelAttribute("userLogin")
+//                               UserLoginBinding userLoginBinding, BindingResult bindingResult,
+//                               RedirectAttributes redirectAttributes) {
+//
+//        if (bindingResult.hasErrors()) {
+//            redirectAttributes.addFlashAttribute("userLogin", userLoginBinding);
+//            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLogin", bindingResult);
+//
+//            return "redirect:/users/login";
+//        }
+//
+//        if (!this.userEntityService.userExists(userLoginBinding.getUsername())) {
+//            redirectAttributes.addFlashAttribute("userLogin", userLoginBinding);
+//            redirectAttributes.addFlashAttribute("UserNotExist", true);
+//
+//            return "redirect:/users/login";
+//        }
+//
+//        UserEntityDto userEntityDto = this.userEntityService.findByUsername(userLoginBinding.getUsername());
+//
+//
+//
+//        if (!passwordEncoder.matches(userLoginBinding.getPassword(), userEntityDto.getPassword())) {
+//            redirectAttributes.addFlashAttribute("userLogin", userLoginBinding);
+//            redirectAttributes.addFlashAttribute("wrongPassword", true);
+//
+//            return "redirect:/users/login";
+//        }
+//
+//        return "redirect:/home";
+//    }
 
 }

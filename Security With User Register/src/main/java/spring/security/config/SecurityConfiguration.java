@@ -8,29 +8,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userEntityService;
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userEntityDetails;
 
-    public SecurityConfig(UserDetailsService userEntityService, PasswordEncoder passwordEncoder) {
-        this.userEntityService = userEntityService;
+    public SecurityConfiguration(PasswordEncoder passwordEncoder, UserDetailsService userEntityDetails) {
         this.passwordEncoder = passwordEncoder;
+        this.userEntityDetails = userEntityDetails;
     }
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.userDetailsService(userEntityService)
-        .passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userEntityDetails)
+                .passwordEncoder(passwordEncoder);
     }
 
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/users**").permitAll()
+                .antMatchers("/").permitAll()
                 .antMatchers("/home").hasRole("USER")
-                .antMatchers("/home").hasRole("ADMIN").and().formLogin();
-
+                .antMatchers("/admin").hasRole("ADMIN")
+                .and()
+                .formLogin();
     }
 }

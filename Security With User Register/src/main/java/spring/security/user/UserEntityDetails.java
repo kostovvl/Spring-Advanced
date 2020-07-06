@@ -1,5 +1,4 @@
 package spring.security.user;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -13,25 +12,23 @@ import spring.security.repository.UserEntityRepository;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 @Component
-public class UserEntityService implements UserDetailsService {
+public class UserEntityDetails  implements UserDetailsService {
 
-    private final UserEntityRepository userRepository;
+    private final UserEntityRepository userEntityRepository;
 
-    public UserEntityService(UserEntityRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserEntityDetails(UserEntityRepository userEntityRepository) {
+        this.userEntityRepository = userEntityRepository;
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<UserEntity> userEntityOpt = this.userRepository.findByUsername(username);
+        Optional<UserEntity> userEntityOpt = this.userEntityRepository.findByUsername(username);
 
         return userEntityOpt
                 .map(this::map)
-                .orElseThrow(() -> new UsernameNotFoundException("Username" + username + "not found!"));
+                .orElseThrow(() -> new UsernameNotFoundException("Username" + username + "does not exist!"));
     }
 
     private UserDetails map(UserEntity userEntity) {
@@ -39,13 +36,13 @@ public class UserEntityService implements UserDetailsService {
                 userEntity.getUsername(),
                 userEntity.getPassword(),
                 userEntity.getRoles()
-                .stream()
-                .map(this::map)
-                .collect(Collectors.toList())
+                        .stream()
+                        .map(this::getAuthorities)
+                        .collect(Collectors.toList())
         );
     }
-
-    private GrantedAuthority map(Role role) {
-        return new SimpleGrantedAuthority(role.getName());
+    private GrantedAuthority getAuthorities(Role userAuthorityEntity) {
+        return new SimpleGrantedAuthority(userAuthorityEntity.getName());
     }
+
 }
