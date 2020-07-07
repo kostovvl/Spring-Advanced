@@ -33,6 +33,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home").hasRole("USER")
                 .antMatchers("/admin").hasRole("ADMIN")
                 .and()
-                .formLogin();
+                .formLogin().and().logout().logoutSuccessUrl("/").permitAll();
     }
 }
