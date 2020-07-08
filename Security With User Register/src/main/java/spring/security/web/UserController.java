@@ -76,20 +76,7 @@ public class UserController {
     @GetMapping("/login")
     public String login() {
 
-        return "redirect:/home";
-    }
-
-    @PostMapping("/login")
-    public String returnIndexPage(@RequestParam("logout") String logout) {
-
-        return "redirect:/";
-    }
-
-
-
-    @GetMapping("/logout")
-    public String logout() {
-        return "redirect:/logout";
+        return "login/login";
     }
 
 

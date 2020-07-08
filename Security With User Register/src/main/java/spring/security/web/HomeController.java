@@ -2,19 +2,18 @@ package spring.security.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller()
 public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        return "index";
+        return "index/index";
     }
 
     @GetMapping("/home")
     public String home() {
-        return "home";
+        return "home/home";
     }
 
 }

@@ -33,6 +33,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home").hasRole("USER")
                 .antMatchers("/admin").hasRole("ADMIN")
                 .and()
-                .formLogin().and().logout().logoutSuccessUrl("/").permitAll();
+                .formLogin().loginPage("/login").permitAll()
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .failureUrl("/users/login")
+                .defaultSuccessUrl("/home")
+                .and().logout()
+                .logoutSuccessUrl("/").permitAll()
+        .and().exceptionHandling().accessDeniedPage("/unauthorised");
     }
 }

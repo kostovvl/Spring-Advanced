@@ -5,18 +5,39 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
-            <ul class="navbar-nav row">
-                <li class="nav-item col-md-4">
-                    <a class="nav-link text-white active h5" href="/">Home</a>
-                </li>
-                <li class="nav-item col-md-4">
-                    <a class="nav-link text-white active h5" href="/users/login">Login</a>
-                </li>
-                <li class="nav-item col-md-4">
-                    <a class="nav-link text-white active h5" href="/users/register">Register</a>
-                </li>
-            </ul>
-        </div>
+        <th:block th:unless="${#httpServletRequest.remoteUser}">
+            <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+                <ul class="navbar-nav row">
+
+                    <li class="nav-item col-md-5">
+                        <form th:action="@{/users/login}" method="get">
+                            <button type="submit" class="btn btn-secondary text-white mb-3">Login</button>
+                        </form>
+                    </li>
+                    <li class="nav-item col-md-4">
+                        <form th:action="@{/users/register}" method="get">
+                            <button type="submit" class="btn btn-secondary text-white mb-3">Register</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </th:block>
+        <th:block th:if="${#httpServletRequest.remoteUser}">
+            <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+                <ul class="navbar-nav row">
+                    <li class="col-md-6">
+                        <form th:action="@{/items/add}" method="get">
+                            <button type="submit" class="btn btn-secondary text-white mb-3">Add Item</button>
+                        </form>
+                    </li>
+
+                    <li class="col-md-4">
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="btn btn-secondary text-white mb-3">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </th:block>
     </nav>
 </th:block>
