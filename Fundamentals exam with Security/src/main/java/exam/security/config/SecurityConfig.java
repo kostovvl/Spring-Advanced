@@ -1,20 +1,21 @@
 package exam.security.config;
 
+import exam.security.userDetails.UserEntityDetails;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserDetailsService userEntityDetails;
+    private final UserEntityDetails userEntityDetails;
 
-    public SecurityConfig(PasswordEncoder passwordEncoder, UserDetailsService userEntityDetails) {
+    public SecurityConfig(PasswordEncoder passwordEncoder, UserEntityDetails userEntityDetails) {
         this.passwordEncoder = passwordEncoder;
+
         this.userEntityDetails = userEntityDetails;
     }
 

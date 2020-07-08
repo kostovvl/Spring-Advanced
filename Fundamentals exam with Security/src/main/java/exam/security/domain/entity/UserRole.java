@@ -13,6 +13,10 @@ public class UserRole extends BaseEntity {
     public UserRole() {
     }
 
+    public UserRole(String name) {
+        this.name = name;
+    }
+
     @Column(name = "name")
     public String getName() {
         return name;
