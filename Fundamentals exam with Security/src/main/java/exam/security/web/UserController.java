@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/users")
@@ -69,14 +70,21 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login(Model model, Principal principal) {
 
         if (model.getAttribute("userLogin") == null) {
             model.addAttribute("userLogin", new UserRegisterBinding());
         }
 
+        model.addAttribute("user", principal);
 
         return "login";
     }
+
+    @GetMapping("/login/fail")
+    public String loginFail() {
+        return "login-fail";
+    }
+
 
 }

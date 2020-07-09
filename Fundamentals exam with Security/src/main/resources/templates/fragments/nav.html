@@ -32,7 +32,11 @@
         <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
             <ul class="navbar-nav row">
                 <li class="nav-item col-md-4">
-                    <a class="nav-link text-white active h5" href="/users/logout">Logout</a>
+                    <form th:action="@{/logout}" th:method="post">
+                    <div class="button-holder d-flex justify-content-center">
+                        <button type="submit" class="btn btn-warning  mb-3">Logout</button>
+                    </div>
+                    </form>
                 </li>
             </ul>
         </div>
