@@ -78,12 +78,12 @@ public class UserController {
 
         model.addAttribute("user", principal);
 
-        return "login";
+        return "login/login";
     }
 
     @GetMapping("/login/fail")
     public String loginFail() {
-        return "login-fail";
+        return "login/login-fail";
     }
 
 

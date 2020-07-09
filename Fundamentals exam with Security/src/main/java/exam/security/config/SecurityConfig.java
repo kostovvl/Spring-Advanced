@@ -30,10 +30,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/", "/users**").permitAll()
                 .antMatchers("/home").hasRole("USER")
-                .antMatchers("/products**").hasRole("ADMIN")
+                .antMatchers("/products/add").hasRole("ADMIN")
+                .antMatchers("/products/buy").hasRole("USER")
+                .antMatchers("/products/buy/all").hasRole("USER")
                 .and().formLogin().loginPage("/login").permitAll()
                 .usernameParameter("username")
                 .passwordParameter("password").failureUrl("/users/login/fail")
-                .defaultSuccessUrl("/home").and().logout().logoutSuccessUrl("/");
+                .defaultSuccessUrl("/home").and().logout().logoutSuccessUrl("/")
+                .and().exceptionHandling().accessDeniedPage("/unauthorized");
     }
 }

@@ -24,7 +24,9 @@
     <th:block th:if="${#httpServletRequest.userPrincipal}">
     <nav class="navbar navbar-expand-lg bg-nav rounded">
         <a class="nav-link text-white active h5" href="/">Shopping List App</a>
+        <th:block sec:authorize="hasRole('ADMIN')">
         <a class="nav-link text-white active h5" href="/products/add">Add Product</a>
+        </th:block>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
