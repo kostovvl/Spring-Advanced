@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping("/register")
     public RestTemplate add(RestTemplate template) {
 
-        UserDto userDto = template.getForObject("localhost:8081/users/register", UserDto.class);
+        UserDto userDto = template.getForObject("http://localhost:8080/users/register", UserDto.class);
 
         this.userService.seedNewUser(userDto);
 
