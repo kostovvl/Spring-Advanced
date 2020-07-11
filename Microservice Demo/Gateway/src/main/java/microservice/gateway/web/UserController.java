@@ -6,16 +6,19 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@RestController()
+@Controller
 @RequestMapping("/users")
 public class UserController {
 
     private final RestTemplate restTemplate;
+    private final WebClient.Builder webClientBuilder;
 
-    public UserController(RestTemplate restTemplate) {
+    public UserController(RestTemplate restTemplate, WebClient.Builder webClientBuilder) {
         this.restTemplate = restTemplate;
+        this.webClientBuilder = webClientBuilder;
     }
 
     @GetMapping("/register")
@@ -48,7 +51,7 @@ public class UserController {
             return "redirect:/users/register";
         }
 
-        restTemplate.postForObject("http://localhost:8081/users/register", userRegisterBinding, UserRegisterBinding.class);
+
         return "redirect:/users/login";
     }
 
