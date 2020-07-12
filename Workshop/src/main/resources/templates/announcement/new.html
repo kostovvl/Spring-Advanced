@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="fragments/navbar :: navbar('announcements')">Navbar here</div>
+<!-- EO: Navbar -->
+
+<div class="container">
+  <form th:action="@{/announcements/save}" method="post" th:object="${newAnnouncement}">
+    <div class="form-group">
+      <label for="announcmentTitle">Title</label>
+      <input type="text"
+             placeholder="Title"
+             class="form-control"
+             th:errorclass="is-invalid"
+             id="announcmentTitle"
+             th:field="*{title}"/>
+      <div class="invalid-feedback" th:each="e : ${#fields.errors('title')}"
+      th:text="${e}">
+        Please fill in a title.
+      </div>
+      <div class="invalid-feedback" th:if="${announcementExists}">
+        Such Announcement already exists!
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="announcementDescription">Description</label>
+      <textarea class="form-control"
+                placeholder="Description"
+                th:errorclass="is-invalid"
+                id="announcementDescription"
+                rows="5"
+                th:field="*{description}"></textarea>
+      <div class="invalid-feedback" th:each="e : ${#fields.errors('description')}"
+           th:text="${e}">
+        Please fill in a title.
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<!-- Bootstap JS -->
+<div th:replace="fragments/bootstrap-js :: bootstrap-js"></div>
+<!-- EO: Bootstap JS -->
+
+</body>
+</html>
