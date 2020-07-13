@@ -3,11 +3,11 @@ import microservice.user.domian.UserRegisterBinding;
 import microservice.user.domian.dto.UserDto;
 import microservice.user.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -32,6 +32,12 @@ public class UserController {
 
 
         return restTemplate;
+    }
+
+    @GetMapping("/get{id}")
+    public UserDto getUsers(@PathVariable("id") Long id) {
+
+        return this.userService.findById(id);
     }
 
 

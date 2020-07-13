@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -39,5 +40,19 @@ public class UserServiceImpl implements UserService {
 
         this.userRepository.saveAndFlush(userEntity);
 
+    }
+
+    @Override
+    public List<UserDto> findAll() {
+        return this.userRepository.findAll().stream()
+                .map(u -> this.mapper.map(u, UserDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto findById(Long Id) {
+        return this.userRepository.findById(Id)
+                .map(u -> this.mapper.map(u, UserDto.class))
+                .orElse(null);
     }
 }

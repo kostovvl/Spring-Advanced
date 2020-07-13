@@ -9,7 +9,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
 @RequestMapping("/users")
 public class UserController {
 
@@ -60,4 +63,19 @@ public class UserController {
     public String login() {
         return "login";
     }
+
+
+    @GetMapping("/all")
+    public List<UserRegisterBinding> all() {
+
+        List<UserRegisterBinding> registerBindings = new ArrayList<>();
+        for (int i = 0; i < 10 ; i++) {
+            String variable = String.valueOf(i + 1);
+            registerBindings.add(restTemplate.getForObject("http://localhost:8081/users/get" + variable,
+                    UserRegisterBinding.class));
+        }
+
+        return registerBindings;
+    }
+
 }
