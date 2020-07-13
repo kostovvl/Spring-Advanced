@@ -25,7 +25,7 @@ public class init implements CommandLineRunner {
         String username = new String();
         String password = new String();
 
-        if (this.userRepository.count() < 10) {
+        if (this.userRepository.count() == 0) {
             for (int i = 0; i < 10; i++) {
                 username = username + String.valueOf(i);
                 password = password + String.valueOf(i);

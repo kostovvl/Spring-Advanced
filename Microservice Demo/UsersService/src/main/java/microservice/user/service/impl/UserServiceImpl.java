@@ -50,9 +50,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findById(Long Id) {
-        return this.userRepository.findById(Id)
-                .map(u -> this.mapper.map(u, UserDto.class))
-                .orElse(null);
+    public UserDto findById(Long id) {
+
+        UserEntity userEntity = this.userRepository.findById(id).orElse(null);
+        UserDto userDto = this.mapper.map(userEntity, UserDto.class);
+
+        System.out.println();
+        return userDto;
     }
 }
