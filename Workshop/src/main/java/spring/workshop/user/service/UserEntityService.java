@@ -1,6 +1,7 @@
 package spring.workshop.user.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spring.workshop.user.domain.UserDto;
 import spring.workshop.user.domain.UserEntity;
@@ -14,10 +15,12 @@ public class UserEntityService {
 
     private final UserEntityRepository userEntityRepository;
     private final ModelMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserEntityService(UserEntityRepository userEntityRepository, ModelMapper mapper) {
+    public UserEntityService(UserEntityRepository userEntityRepository, ModelMapper mapper, PasswordEncoder passwordEncoder) {
         this.userEntityRepository = userEntityRepository;
         this.mapper = mapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void seedNewUser(UserDto userDto) {
@@ -32,6 +35,7 @@ public class UserEntityService {
 
         userEntity.setRoles(List.of(user));
 
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         this.userEntityRepository.saveAndFlush(userEntity);
     }
 }
