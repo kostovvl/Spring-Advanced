@@ -9,29 +9,29 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import spring.workshop.user.service.UserDetailsServiceImpl;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
-    public SecurityConfig(PasswordEncoder passwordEncoder, UserDetailsServiceImpl userDetailsService) {
-        this.passwordEncoder = passwordEncoder;
+    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
     }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/home").hasRole("USER")
                 .antMatchers("/announcements").hasRole("USER")
                 .antMatchers("/announcements/save", "announcements/delete**").hasRole("ADMIN")
-                .and().formLogin().loginPage("/").permitAll().defaultSuccessUrl("/home").failureForwardUrl("/");
-
+                .and().formLogin();
     }
 }

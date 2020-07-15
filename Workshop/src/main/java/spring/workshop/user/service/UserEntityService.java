@@ -37,4 +37,5 @@ public class UserEntityService {
         userEntity.setPassword(this.passwordEncoder.encode(userEntity.getPassword()));
         this.userEntityRepository.saveAndFlush(userEntity);
     }
+
 }

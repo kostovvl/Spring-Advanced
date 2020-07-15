@@ -7,37 +7,38 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import spring.workshop.user.domain.UserEntity;
 import spring.workshop.user.repository.UserEntityRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserEntityRepository userEntityRepository;
-    private final ModelMapper mapper;
+   private final UserEntityRepository userEntityRepository;
 
-    public UserDetailsServiceImpl(UserEntityRepository userEntityRepository, ModelMapper mapper) {
+    public UserDetailsServiceImpl(UserEntityRepository userEntityRepository) {
         this.userEntityRepository = userEntityRepository;
-        this.mapper = mapper;
+
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserEntity userEntity = this.userEntityRepository.findByUsername(username)
-                .map(u -> this.mapper.map(u, UserEntity.class))
-                .orElseThrow(() -> new UsernameNotFoundException("shit"));
+                .orElseThrow(() -> new UsernameNotFoundException("Shit!"));
 
+        System.out.println();
 
-        String userNameDetail = userEntity.getUsername();
-        String passwordDetail = userEntity.getPassword();
-        List<GrantedAuthority> roles = userEntity.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.getRole()))
+        String userDetailsUsername = userEntity.getUsername();
+        String userDetailsPassword = userEntity.getPassword();
+        List<GrantedAuthority> roles = userEntity.getRoles().stream()
+                .map(r -> new SimpleGrantedAuthority(r.getRole()))
                 .collect(Collectors.toList());
 
-        return new User(userNameDetail, passwordDetail, roles);
+        User user = new User(userDetailsUsername, userDetailsPassword, roles);
+        return new User(userDetailsUsername, userDetailsPassword, roles);
     }
 }
