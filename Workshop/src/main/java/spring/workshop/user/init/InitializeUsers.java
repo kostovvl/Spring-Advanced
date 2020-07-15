@@ -21,8 +21,9 @@ public class InitializeUsers implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (this.userEntityRepository.count() == 0) {
             UserDto admin = new UserDto();
-            admin.setUsername("lucho@example.com");
+            admin.setUsername("admin@example.com");
             admin.setPassword("topsecret");
+
 
             this.userEntityService.seedNewUser(admin);
 

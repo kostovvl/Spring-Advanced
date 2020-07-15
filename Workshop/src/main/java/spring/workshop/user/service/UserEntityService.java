@@ -27,15 +27,14 @@ public class UserEntityService {
         UserEntity userEntity = this.mapper.map(userDto, UserEntity.class);
         UserRole user = new UserRole("ROLE_USER");
         user.setUserEntity(userEntity);
+        userEntity.setRoles(List.of(user));
         if (this.userEntityRepository.count() == 0) {
             UserRole admin = new UserRole("ROLE_ADMIN");
             admin.setUserEntity(userEntity);
             userEntity.setRoles(List.of(admin, user));
         }
 
-        userEntity.setRoles(List.of(user));
-
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        userEntity.setPassword(this.passwordEncoder.encode(userEntity.getPassword()));
         this.userEntityRepository.saveAndFlush(userEntity);
     }
 }
