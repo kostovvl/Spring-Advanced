@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="fragments/head :: head"></head>
+<head th:replace="fragments/head :: head"></head>
 <body>
 
 <div class="container center">
@@ -17,24 +17,26 @@
         </a>
       </p>
       <hr>
-      <form th:action="@{/login}" method="post">
+      <form th:action="@{/login/authenticate}" th:method="post">
+        <h4 th:if="${param.error}" class="text-danger"> Bad Credentials</h4>
+
         <div class="form-group">
           <label for="userEmail">Email</label>
           <input
-              name="username"
-              type="email"
-              placeholder="Email"
-              class="form-control"
-              id="userEmail"/>
+                  name="username"
+                  type="email"
+                  placeholder="Email"
+                  class="form-control"
+                  id="userEmail"/>
         </div> <!-- form-group// -->
         <div class="form-group">
           <label for="userPassword">Password</label>
           <input
-              name="password"
-              type="password"
-              placeholder="Password"
-              class="form-control"
-              id="userPassword"/>
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  class="form-control"
+                  id="userPassword"/>
         </div> <!-- form-group// -->
         <div class="row">
           <div class="col-md-6">
