@@ -7,6 +7,7 @@ import spring.workshop.announcement.domain.AnnouncementEntity;
 import spring.workshop.announcement.domain.AnnouncementView;
 import spring.workshop.announcement.repository.AnnouncementRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,10 @@ public class AnnouncementService {
     }
 
     public void addNewAnnouncement(AnnouncementDto announcementDto) {
-        this.announcementRepository.saveAndFlush(this.mapper.map(announcementDto, AnnouncementEntity.class));
+        AnnouncementEntity announcementEntity = this.mapper.map(announcementDto, AnnouncementEntity.class);
+        announcementEntity.setCreatedOn(LocalDateTime.now());
+        announcementEntity.setUpdatedOn(LocalDateTime.now());
+        this.announcementRepository.saveAndFlush(announcementEntity);
     }
 
     public List<AnnouncementView> getAllAnnouncements() {
