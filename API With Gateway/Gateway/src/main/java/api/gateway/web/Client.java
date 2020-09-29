@@ -18,7 +18,7 @@ public class Client {
     }
 
     public UserEntity registerUser(UserEntity userEntity) {
-        return this.restTemplate.postForObject(Global.USER_SERVICE_URL + "/register", UserEntity.class, UserEntity.class);
+        return this.restTemplate.postForObject(Global.USER_SERVICE_URL + "/register", userEntity, UserEntity.class);
     }
 
     public UserEntity loginUser(String username) {

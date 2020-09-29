@@ -1,5 +1,7 @@
 package api.userservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,7 @@ public class UserEntityRole {
 
     public long id;
     public String role;
+    @JsonIgnore
     public UserEntity user;
 
     public UserEntityRole() {
