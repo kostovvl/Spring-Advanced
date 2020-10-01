@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class Client {
+public class UserClient {
 
     private final RestTemplate restTemplate;
     private final ApiKey apiKey;
 
 
     @Autowired
-    public Client(RestTemplate restTemplate, ApiKey apiKey) {
+    public UserClient(RestTemplate restTemplate, ApiKey apiKey) {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
     }

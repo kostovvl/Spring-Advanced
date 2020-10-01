@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class UserController {
 
-    private final Client client;
+    private final UserClient userClient;
     private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public UserController(Client client, PasswordEncoder passwordEncoder) {
-        this.client = client;
+    public UserController(UserClient userClient, PasswordEncoder passwordEncoder) {
+        this.userClient = userClient;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -28,7 +28,7 @@ public class UserController {
     public ResponseEntity<?> register(@RequestBody UserEntity userEntity) {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
-        UserEntity result = this.client.registerUser(userEntity);
+        UserEntity result = this.userClient.registerUser(userEntity);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

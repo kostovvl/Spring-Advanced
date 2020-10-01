@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.List;
 
 @RestController()
 @RequestMapping("/products")
@@ -24,34 +27,70 @@ public class Controller {
     @PostMapping("/create/{apiKey}")
     public ResponseEntity<?> createProduct(@PathVariable(name = "apiKey") String apiKey,
                                            @RequestBody()Product product ){
-
-        if (this.apiKey.getSecurityKey().equals(apiKey)) {
             try {
+                checkKey(apiKey);
                 Product result = this.productService.addNew(product);
                 return new ResponseEntity<>(result, HttpStatus.OK);
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            catch (Exception e) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-
-        } else {
-         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
 
     }
 
     @GetMapping("/all/{apiKey}")
-    public ResponseEntity<?> getAllProducts() {
-
+    public ResponseEntity<?> getAllProducts(@PathVariable(name = "apiKey") String apiKey) {
+        try {
+            checkKey(apiKey);
+            List<Product> result = this.productService.getAll();
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/details/{productId}/{apiKey}")
-    public ResponseEntity<?> getByProductId() {
+    public ResponseEntity<?> getByProductId(@PathVariable(name = "productId") long productId,
+                                            @PathVariable(name = "apiKey") String apiKey) {
+
+        try {
+            checkKey(apiKey);
+            Product result = this.productService.findById(productId);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
     }
 
-    @DeleteMapping("/delete/{productID}/{apiKey}")
-    public ResponseEntity<?> deleteById() {
+    @DeleteMapping("/delete/{productId}/{apiKey}")
+    public ResponseEntity<?> deleteById(@PathVariable(name = "productId") long productId,
+                                        @PathVariable(name = "apiKey") String apiKey) {
 
+        try {
+            checkKey(apiKey);
+           this.productService.delete(productId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void checkKey(String apiKey) {
+        if (!this.apiKey.getSecurityKey().equals(apiKey)) {
+            throw new IllegalArgumentException("Unauthorized");
+        }
     }
 
 }

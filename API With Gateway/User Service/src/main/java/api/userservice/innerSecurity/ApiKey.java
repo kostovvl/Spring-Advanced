@@ -12,6 +12,8 @@ public class ApiKey {
     }
 
     public void setSecurityKey(String securityKey) {
+
         this.securityKey = securityKey;
+        System.out.println("Security Key Updated!");
     }
 }
