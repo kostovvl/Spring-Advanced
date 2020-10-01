@@ -1,6 +1,7 @@
-package api.gateway.web;
+package api.gateway.web.controller;
 
 import api.gateway.domain.UserEntity;
+import api.gateway.web.client.UserClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,5 +32,7 @@ public class UserController {
         UserEntity result = this.userClient.registerUser(userEntity);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+
 
 }

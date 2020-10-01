@@ -1,4 +1,4 @@
-package api.gateway.web;
+package api.gateway.web.client;
 
 import api.gateway.config.Global;
 import api.gateway.domain.UserEntity;

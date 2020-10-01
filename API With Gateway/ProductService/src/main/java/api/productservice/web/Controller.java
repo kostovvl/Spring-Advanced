@@ -1,5 +1,6 @@
 package api.productservice.web;
 
+import api.productservice.domain.AllProducts;
 import api.productservice.domain.Product;
 import api.productservice.innerSecurity.ApiKey;
 import api.productservice.service.ProductService;
@@ -12,7 +13,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.util.List;
 
 @RestController()
-@RequestMapping("/products")
 public class Controller {
 
     private final ProductService productService;
@@ -44,7 +44,7 @@ public class Controller {
     public ResponseEntity<?> getAllProducts(@PathVariable(name = "apiKey") String apiKey) {
         try {
             checkKey(apiKey);
-            List<Product> result = this.productService.getAll();
+           AllProducts result = this.productService.getAll();
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

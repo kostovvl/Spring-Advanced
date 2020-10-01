@@ -18,10 +18,12 @@ public class InnerSecurityController {
         this.apiKey = apiKey;
     }
 
-    @Scheduled(cron = "1 10 * * * ? *")
+
     public void sendKey() {
         this.apiKeyGenerator.generateKey();
         this.restTemplate.postForObject(Global.USER_SERVICE_URL + "/security",
+                this.apiKey.getSecurityKey(), String.class);
+        this.restTemplate.postForObject(Global.PRODUCT_SERVICE_URL + "/security",
                 this.apiKey.getSecurityKey(), String.class);
     }
 }

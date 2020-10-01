@@ -1,5 +1,6 @@
 package api.productservice.service;
 
+import api.productservice.domain.AllProducts;
 import api.productservice.domain.Product;
 import api.productservice.repository.ProductRepository;
 import javassist.NotFoundException;
@@ -22,8 +23,10 @@ public class ProductService {
         return this.productRepository.saveAndFlush(product);
     }
 
-    public List<Product> getAll () {
-        return this.productRepository.findAll();
+    public AllProducts getAll () {
+        AllProducts result = new AllProducts();
+        result.setAllProducts(this.productRepository.findAll());
+        return result;
     }
 
     public Product findById(long id) {

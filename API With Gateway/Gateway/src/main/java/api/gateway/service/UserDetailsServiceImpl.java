@@ -1,7 +1,7 @@
 package api.gateway.service;
 
-import api.gateway.domain.UserEntity;
-import api.gateway.web.Client;
+import api.gateway.domain.UserEntity;;
+import api.gateway.web.client.UserClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,12 +17,13 @@ import java.util.stream.Collectors;
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final Client client;
+    private final UserClient client;
 
     @Autowired
-    public UserDetailsServiceImpl(Client client) {
+    public UserDetailsServiceImpl(UserClient client) {
         this.client = client;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
